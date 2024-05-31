@@ -12,4 +12,10 @@
     <PackageReference Include="CryptoClients.Net" Version="1.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Settings\SymbolNames.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
