@@ -41,6 +41,7 @@
             cbPairs = new ComboBox();
             label4 = new Label();
             label3 = new Label();
+            label8 = new Label();
             labelCurrentTime = new Label();
             label1 = new Label();
             mainPanel.SuspendLayout();
@@ -60,6 +61,7 @@
             mainPanel.Controls.Add(cbPairs);
             mainPanel.Controls.Add(label4);
             mainPanel.Controls.Add(label3);
+            mainPanel.Controls.Add(label8);
             mainPanel.Controls.Add(labelCurrentTime);
             mainPanel.Controls.Add(label1);
             mainPanel.Location = new Point(12, 12);
@@ -86,7 +88,7 @@
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14F, FontStyle.Bold, GraphicsUnit.World);
             label2.ForeColor = Color.FromArgb(56, 54, 55);
-            label2.Location = new Point(19, 8);
+            label2.Location = new Point(19, 0);
             label2.Name = "label2";
             label2.Size = new Size(226, 19);
             label2.TabIndex = 3;
@@ -98,7 +100,7 @@
             tbKucoin.BorderStyle = BorderStyle.None;
             tbKucoin.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tbKucoin.ForeColor = Color.FromArgb(56, 54, 55);
-            tbKucoin.Location = new Point(92, 209);
+            tbKucoin.Location = new Point(92, 193);
             tbKucoin.Name = "tbKucoin";
             tbKucoin.Size = new Size(153, 22);
             tbKucoin.TabIndex = 2;
@@ -108,7 +110,7 @@
             tbBybit.BorderStyle = BorderStyle.None;
             tbBybit.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tbBybit.ForeColor = Color.FromArgb(56, 54, 55);
-            tbBybit.Location = new Point(92, 181);
+            tbBybit.Location = new Point(92, 165);
             tbBybit.Name = "tbBybit";
             tbBybit.Size = new Size(153, 22);
             tbBybit.TabIndex = 2;
@@ -119,7 +121,7 @@
             label7.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             label7.ForeColor = Color.FromArgb(56, 54, 55);
             label7.ImageAlign = ContentAlignment.BottomCenter;
-            label7.Location = new Point(19, 212);
+            label7.Location = new Point(19, 196);
             label7.Name = "label7";
             label7.Size = new Size(60, 21);
             label7.TabIndex = 0;
@@ -130,7 +132,7 @@
             tbBitget.BorderStyle = BorderStyle.None;
             tbBitget.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tbBitget.ForeColor = Color.FromArgb(56, 54, 55);
-            tbBitget.Location = new Point(92, 153);
+            tbBitget.Location = new Point(92, 137);
             tbBitget.Name = "tbBitget";
             tbBitget.Size = new Size(153, 22);
             tbBitget.TabIndex = 2;
@@ -141,7 +143,7 @@
             label6.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             label6.ForeColor = Color.FromArgb(56, 54, 55);
             label6.ImageAlign = ContentAlignment.BottomCenter;
-            label6.Location = new Point(19, 184);
+            label6.Location = new Point(19, 168);
             label6.Name = "label6";
             label6.Size = new Size(48, 21);
             label6.TabIndex = 0;
@@ -152,7 +154,7 @@
             tbBinance.BorderStyle = BorderStyle.None;
             tbBinance.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tbBinance.ForeColor = Color.FromArgb(56, 54, 55);
-            tbBinance.Location = new Point(92, 125);
+            tbBinance.Location = new Point(92, 109);
             tbBinance.Name = "tbBinance";
             tbBinance.Size = new Size(153, 22);
             tbBinance.TabIndex = 2;
@@ -163,7 +165,7 @@
             label5.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             label5.ForeColor = Color.FromArgb(56, 54, 55);
             label5.ImageAlign = ContentAlignment.BottomCenter;
-            label5.Location = new Point(19, 156);
+            label5.Location = new Point(19, 140);
             label5.Name = "label5";
             label5.Size = new Size(55, 21);
             label5.TabIndex = 0;
@@ -177,12 +179,13 @@
             cbPairs.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             cbPairs.ForeColor = Color.FromArgb(56, 54, 55);
             cbPairs.FormattingEnabled = true;
-            cbPairs.Items.AddRange(new object[] { "BTCUSDT" });
-            cbPairs.Location = new Point(19, 59);
+            cbPairs.Items.AddRange(new object[] { "BTCUSDT", "ETHUSDT", "SOLUSDC" });
+            cbPairs.Location = new Point(19, 44);
             cbPairs.Name = "cbPairs";
             cbPairs.Size = new Size(226, 29);
             cbPairs.Sorted = true;
             cbPairs.TabIndex = 1;
+            cbPairs.SelectedIndexChanged += cbPairs_SelectedIndexChanged;
             // 
             // label4
             // 
@@ -190,7 +193,7 @@
             label4.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             label4.ForeColor = Color.FromArgb(56, 54, 55);
             label4.ImageAlign = ContentAlignment.BottomCenter;
-            label4.Location = new Point(19, 128);
+            label4.Location = new Point(19, 112);
             label4.Name = "label4";
             label4.Size = new Size(67, 21);
             label4.TabIndex = 0;
@@ -200,17 +203,28 @@
             // 
             label3.AutoSize = true;
             label3.ForeColor = Color.FromArgb(56, 54, 55);
-            label3.Location = new Point(19, 101);
+            label3.Location = new Point(19, 85);
             label3.Name = "label3";
             label3.Size = new Size(47, 15);
             label3.TabIndex = 0;
             label3.Text = "Биржи:";
             // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Segoe UI", 9F, FontStyle.Italic);
+            label8.ForeColor = Color.FromArgb(56, 54, 55);
+            label8.Location = new Point(19, 257);
+            label8.Name = "label8";
+            label8.Size = new Size(168, 15);
+            label8.TabIndex = 0;
+            label8.Text = "Скорость обновления - 5 сек.";
+            // 
             // labelCurrentTime
             // 
             labelCurrentTime.AutoSize = true;
             labelCurrentTime.ForeColor = Color.FromArgb(56, 54, 55);
-            labelCurrentTime.Location = new Point(19, 246);
+            labelCurrentTime.Location = new Point(19, 230);
             labelCurrentTime.Name = "labelCurrentTime";
             labelCurrentTime.Size = new Size(76, 15);
             labelCurrentTime.TabIndex = 0;
@@ -220,7 +234,7 @@
             // 
             label1.AutoSize = true;
             label1.ForeColor = Color.FromArgb(56, 54, 55);
-            label1.Location = new Point(19, 41);
+            label1.Location = new Point(19, 26);
             label1.Name = "label1";
             label1.Size = new Size(93, 15);
             label1.TabIndex = 0;
@@ -230,9 +244,10 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(235, 235, 235);
             ClientSize = new Size(284, 331);
             Controls.Add(mainPanel);
-            MaximumSize = new Size(420, 480);
+            MaximumSize = new Size(300, 370);
             MinimumSize = new Size(300, 370);
             Name = "MainWindow";
             Text = "CryptoRates";
@@ -259,5 +274,6 @@
         private Label label5;
         private Label labelCurrentTime;
         private Button butExit;
+        private Label label8;
     }
 }

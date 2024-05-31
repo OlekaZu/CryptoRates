@@ -1,6 +1,5 @@
 ﻿using CryptoExchange.Net.Objects.Sockets;
 using CryptoRates.Settings;
-using System.Xml.Linq;
 
 namespace CryptoRates.Exchanges
 {
@@ -8,23 +7,40 @@ namespace CryptoRates.Exchanges
     {
         private readonly string _name = "Binance";
 
-        public bool CanPrint { get; set; } = true;
-
         public async Task<UpdateSubscription> SubscribeTicker(string symbol, Action<decimal> handler)
         {
             var actualSymbol = ExchangeSymbols.GetActualSymbolName(symbol, _name)
               ?? throw new ArgumentException($"{symbol} for {_name} not found");
+
             var subscription = await IExchange.SocketClient.Binance.SpotApi.ExchangeData
                 .SubscribeToTickerUpdatesAsync(symbol, (data) => handler(data.Data.LastPrice));
+
             if (!subscription.Success)
                 throw new ArgumentException(subscription.Error?.ToString());
+
             return subscription.Data;
         }
 
-        public void Unsubscribe()
+        public void Unsubscribe() => IExchange.SocketClient.Binance.UnsubscribeAllAsync();
+
+        public bool HasSubscriptions() => IExchange.SocketClient.Binance.CurrentSubscriptions > 0;
+
+        private bool _disposed = false;
+
+        protected virtual void Dispose(bool disposing)
         {
-            IExchange.SocketClient.Binance.UnsubscribeAllAsync();
-            IExchange.SocketClient.Binance.Dispose();
+            if (!_disposed)
+            {
+                if (disposing)
+                    IExchange.SocketClient.Binance.Dispose();
+            }
+            _disposed = true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

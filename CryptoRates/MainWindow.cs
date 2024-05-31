@@ -1,8 +1,6 @@
-using CryptoClients.Net;
 using CryptoRates.Exchanges;
 using CryptoRates.Settings;
-using System.ComponentModel.DataAnnotations;
-
+using System.Globalization;
 
 namespace CryptoRates
 {
@@ -15,21 +13,29 @@ namespace CryptoRates
             {"Bybit", new BybitExchange()},
             {"Kucoin", new KucoinExchange()}
         };
+        private Dictionary<string, decimal> _bufferRates = new() {
+            {"Binance", 0},
+            {"Bitget", 0},
+            {"Bybit", 0},
+            {"Kucoin", 0}
+        };
         private System.Timers.Timer _timer;
+        private string? _currentSymbol;
 
         public MainWindow()
         {
             InitializeComponent();
-            cbPairs.SelectedIndex = 0;
+            labelCurrentTime.Text = DateTime.Now.ToString();
             _timer = new System.Timers.Timer();
             _timer.Interval = 5000;
             _timer.Elapsed += timer_Elapsed;
             LoadSymbolsFromFile();
-            GetData();
+            cbPairs.SelectedIndex = 0;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
+            UpdateTextBoxes();
             _timer.Start();
         }
 
@@ -42,12 +48,11 @@ namespace CryptoRates
 
         private void GetData()
         {
-            var symbol = cbPairs.SelectedItem!.ToString();
             _exchanges.AsParallel().ForAll(async x =>
                {
                    try
                    {
-                       var subData = await x.Value.SubscribeTicker(symbol!,
+                       await x.Value.SubscribeTicker(_currentSymbol!,
                         rate => HandleTickerUpdate(x.Key, rate));
                    }
                    catch (Exception ex)
@@ -61,52 +66,21 @@ namespace CryptoRates
         private void timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
             Console.WriteLine("Timer elapsed");
-            _exchanges.AsParallel().ForAll(x => x.Value.CanPrint = true);
+            labelCurrentTime.Invoke(() => labelCurrentTime.Text = DateTime.Now.ToString());
+            UpdateTextBoxes();
+        }
+
+        private void UpdateTextBoxes()
+        {
+            tbBinance.Invoke(() => tbBinance.Text = _bufferRates["Binance"].ToString("N2", CultureInfo.InvariantCulture));
+            tbBitget.Invoke(() => tbBitget.Text = _bufferRates["Bitget"].ToString("N2", CultureInfo.InvariantCulture));
+            tbBybit.Invoke(() => tbBybit.Text = _bufferRates["Bybit"].ToString("N2", CultureInfo.InvariantCulture));
+            tbKucoin.Invoke(() => tbKucoin.Text = _bufferRates["Kucoin"].ToString("N2", CultureInfo.InvariantCulture));
         }
 
         private void HandleTickerUpdate(string ecxhangeName, decimal rate)
         {
-            var rateStr = rate.ToString("0.00");
-            tbBinance.Invoke((MethodInvoker)delegate
-            {
-                switch (ecxhangeName)
-                {
-                    case "Binance":
-                        if (_exchanges["Binance"].CanPrint)
-                        {
-                            tbBinance.Text = rateStr;
-                            _exchanges["Binance"].CanPrint = false;
-                        }
-                        break;
-                    case "Bitget":
-                        if (_exchanges["Bitget"].CanPrint)
-                        {
-                            tbBitget.Text = rateStr;
-                            _exchanges["Bitget"].CanPrint = false;
-                        }
-                        break;
-                    case "Bybit":
-                        if (_exchanges["Bybit"].CanPrint)
-                        {
-                            tbBybit.Text = rateStr;
-                            _exchanges["Bybit"].CanPrint = false;
-                        }
-                        break;
-                    case "Kucoin":
-                        if (_exchanges["Kucoin"].CanPrint)
-                        {
-                            tbKucoin.Text = rateStr;
-                            _exchanges["Kucoin"].CanPrint = false;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            });
-            labelCurrentTime.Invoke((MethodInvoker)delegate
-            {
-                labelCurrentTime.Text = DateTime.Now.ToString();
-            });
+            _bufferRates[ecxhangeName] = rate;
         }
 
         private void butExit_Click(object sender, EventArgs e)
@@ -114,9 +88,20 @@ namespace CryptoRates
             foreach (var exchange in _exchanges)
             {
                 exchange.Value.Unsubscribe();
+                exchange.Value.Dispose();
             }
             this.Close();
         }
 
+        private void cbPairs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            _currentSymbol = cbPairs.SelectedItem!.ToString();
+            foreach (var exchange in _exchanges)
+            {
+                if (exchange.Value.HasSubscriptions())
+                    exchange.Value.Unsubscribe();
+            }
+            GetData();
+        }
     }
 }
