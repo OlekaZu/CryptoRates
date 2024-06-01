@@ -98,21 +98,25 @@
             // 
             // tbKucoin
             // 
+            tbKucoin.BackColor = SystemColors.Window;
             tbKucoin.BorderStyle = BorderStyle.None;
             tbKucoin.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tbKucoin.ForeColor = Color.FromArgb(56, 54, 55);
             tbKucoin.Location = new Point(92, 193);
             tbKucoin.Name = "tbKucoin";
+            tbKucoin.ReadOnly = true;
             tbKucoin.Size = new Size(153, 22);
             tbKucoin.TabIndex = 2;
             // 
             // tbBybit
             // 
+            tbBybit.BackColor = SystemColors.Window;
             tbBybit.BorderStyle = BorderStyle.None;
             tbBybit.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tbBybit.ForeColor = Color.FromArgb(56, 54, 55);
             tbBybit.Location = new Point(92, 165);
             tbBybit.Name = "tbBybit";
+            tbBybit.ReadOnly = true;
             tbBybit.Size = new Size(153, 22);
             tbBybit.TabIndex = 2;
             // 
@@ -130,11 +134,13 @@
             // 
             // tbBitget
             // 
+            tbBitget.BackColor = SystemColors.Window;
             tbBitget.BorderStyle = BorderStyle.None;
             tbBitget.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tbBitget.ForeColor = Color.FromArgb(56, 54, 55);
             tbBitget.Location = new Point(92, 137);
             tbBitget.Name = "tbBitget";
+            tbBitget.ReadOnly = true;
             tbBitget.Size = new Size(153, 22);
             tbBitget.TabIndex = 2;
             // 
@@ -152,11 +158,13 @@
             // 
             // tbBinance
             // 
+            tbBinance.BackColor = SystemColors.Window;
             tbBinance.BorderStyle = BorderStyle.None;
             tbBinance.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             tbBinance.ForeColor = Color.FromArgb(56, 54, 55);
             tbBinance.Location = new Point(92, 109);
             tbBinance.Name = "tbBinance";
+            tbBinance.ReadOnly = true;
             tbBinance.Size = new Size(153, 22);
             tbBinance.TabIndex = 2;
             // 

@@ -110,6 +110,7 @@ namespace CryptoRates
 
         private void cbPairs_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.label1.Focus();
             _currentSymbol = cbPairs.SelectedItem!.ToString();
             _log.Information($"Выбрана пара {_currentSymbol}");
             foreach (var exchange in _exchanges)
