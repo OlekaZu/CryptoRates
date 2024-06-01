@@ -1,5 +1,6 @@
 using CryptoRates.Exchanges;
 using CryptoRates.Settings;
+using Serilog;
 using System.Globalization;
 
 namespace CryptoRates
@@ -21,9 +22,12 @@ namespace CryptoRates
         };
         private System.Timers.Timer _timer;
         private string? _currentSymbol;
+        private ILogger _log;
 
-        public MainWindow()
+        public MainWindow(ILogger logger)
         {
+            _log = logger;
+            _log.Information("Приложение запущено.");
             InitializeComponent();
             labelCurrentTime.Text = DateTime.Now.ToString();
             _timer = new System.Timers.Timer();
@@ -35,15 +39,20 @@ namespace CryptoRates
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            UpdateTextBoxes();
             _timer.Start();
+            UpdateTextBoxes();
         }
 
         private void LoadSymbolsFromFile()
         {
             var message = ExchangeSymbols.LoadSymbols("Settings/SymbolNames.txt");
             if (message != null)
+            {
                 MessageBox.Show(message);
+                _log.Error(message);
+                return;
+            }
+            _log.Information("Названия пар загружены из файла.");
         }
 
         private void GetData()
@@ -54,10 +63,12 @@ namespace CryptoRates
                    {
                        await x.Value.SubscribeTicker(_currentSymbol!,
                         rate => HandleTickerUpdate(x.Key, rate));
+                       _log.Debug("Сокет подключен.");
                    }
                    catch (Exception ex)
                    {
                        MessageBox.Show(ex.Message);
+                       _log.Warning(ex.Message);
                    }
                }
             );
@@ -65,7 +76,7 @@ namespace CryptoRates
 
         private void timer_Elapsed(object? sender, System.Timers.ElapsedEventArgs e)
         {
-            Console.WriteLine("Timer elapsed");
+            _log.Debug("Timer elapsed");
             labelCurrentTime.Invoke(() => labelCurrentTime.Text = DateTime.Now.ToString());
             UpdateTextBoxes();
         }
@@ -76,6 +87,7 @@ namespace CryptoRates
             tbBitget.Invoke(() => tbBitget.Text = _bufferRates["Bitget"].ToString("N2", CultureInfo.InvariantCulture));
             tbBybit.Invoke(() => tbBybit.Text = _bufferRates["Bybit"].ToString("N2", CultureInfo.InvariantCulture));
             tbKucoin.Invoke(() => tbKucoin.Text = _bufferRates["Kucoin"].ToString("N2", CultureInfo.InvariantCulture));
+            _log.Debug("Цены обновлены.");
         }
 
         private void HandleTickerUpdate(string ecxhangeName, decimal rate)
@@ -90,12 +102,15 @@ namespace CryptoRates
                 exchange.Value.Unsubscribe();
                 exchange.Value.Dispose();
             }
+            _timer.Close();
+            _log.Information("Приложение закрыто.");
             this.Close();
         }
 
         private void cbPairs_SelectedIndexChanged(object sender, EventArgs e)
         {
             _currentSymbol = cbPairs.SelectedItem!.ToString();
+            _log.Information($"Выбрана пара {_currentSymbol}");
             foreach (var exchange in _exchanges)
             {
                 if (exchange.Value.HasSubscriptions())
