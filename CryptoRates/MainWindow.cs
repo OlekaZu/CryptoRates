@@ -26,6 +26,7 @@ namespace CryptoRates
 
         public MainWindow(ILogger logger)
         {
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
             _log = logger;
             _log.Information("Приложение запущено.");
             InitializeComponent();
