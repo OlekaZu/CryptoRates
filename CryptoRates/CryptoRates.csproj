@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Settings\icon.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Settings\icon.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CryptoClients.Net" Version="1.1.0" />

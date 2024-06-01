@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             mainPanel = new Panel();
             butExit = new Button();
             label2 = new Label();
@@ -179,7 +180,7 @@
             cbPairs.Font = new Font("Segoe UI Semibold", 12F, FontStyle.Bold, GraphicsUnit.Point, 204);
             cbPairs.ForeColor = Color.FromArgb(56, 54, 55);
             cbPairs.FormattingEnabled = true;
-            cbPairs.Items.AddRange(new object[] { "BTCUSDT", "ETHUSDT", "SOLUSDC" });
+            cbPairs.Items.AddRange(new object[] { "BTCUSDT", "ETHUSDT", "SOLUSDT" });
             cbPairs.Location = new Point(19, 44);
             cbPairs.Name = "cbPairs";
             cbPairs.Size = new Size(226, 29);
@@ -247,6 +248,7 @@
             BackColor = Color.FromArgb(235, 235, 235);
             ClientSize = new Size(284, 331);
             Controls.Add(mainPanel);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximumSize = new Size(300, 370);
             MinimumSize = new Size(300, 370);
             Name = "MainWindow";
